@@ -23,7 +23,14 @@ test:
 package:
   stage: package
   script:
-    - # Добавьте скрипт для упаковки OpenSSL, если необходимо
+    - mkdir openssl-package
+    - # Копирование бинарных файлов OpenSSL в директорию openssl-package
+    - cp /path/to/openssl-binary-files openssl-package/
+    - # Создание архива с бинарными файлами OpenSSL
+    - tar czvf openssl-package.tar.gz openssl-package/
+  artifacts:
+    paths:
+      - openssl-package.tar.gz
 
 docker-build:
   stage: docker-build
@@ -35,3 +42,4 @@ docker-publish:
   script:
     - echo "$DOCKER_REGISTRY_PASSWORD" | docker login -u "$DOCKER_REGISTRY_USERNAME" --password-stdin $DOCKER_REGISTRY
     - docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+
